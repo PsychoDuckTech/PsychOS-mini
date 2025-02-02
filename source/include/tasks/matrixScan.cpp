@@ -1,5 +1,4 @@
 #include "matrixScan.h"
-#include "BLEHandler.h"
 
 extern BLECharacteristic psychoCharacteristic;
 
@@ -11,8 +10,6 @@ extern BLECharacteristic psychoCharacteristic;
 
 void matrixScan(void *parameters)
 {
-    initializeMatrix();
-
     Serial.println(task_keyScanning_started);
     Serial.println("\n");
 
@@ -26,22 +23,22 @@ void matrixScan(void *parameters)
 
     for (int row = 0; row < totalRows; row++)
     {
-        gpio_set_level((gpio_num_t)rowPins[row], 0); // Activate current row pin
-        for (int col = 0; col < totalCols; col++)    // Scan the column combination with the current row
+        digitalWrite(rowPins[row], LOW);          // Activate current row pin
+        for (int col = 0; col < totalCols; col++) // Scan the column combination with the current row
         {
             bool reading = (digitalRead(colPins[col]) == LOW);
             keyStates[row][col] = reading;
             lastReading[row][col] = reading;
             lastDebounceTime[row][col] = millis();
         }
-        gpio_set_level((gpio_num_t)rowPins[row], 1); // Reset the row pin
+        digitalWrite(rowPins[row], HIGH); // Reset the row pin
     }
 
     for (;;)
     {
         for (int row = 0; row < totalRows; row++)
         {
-            gpio_set_level((gpio_num_t)rowPins[row], 0); // Activate current row pin
+            digitalWrite(rowPins[row], LOW); // Activate current row pin
 
             for (int col = 0; col < totalCols; col++)
             {
@@ -65,7 +62,7 @@ void matrixScan(void *parameters)
                         default:
                             if (moduleConnectionStatus)
                             {
-                                uint8_t data[2] = {keyMap[row][col], (reading ? 1 : 0)};
+                                uint8_t data[2] = {keyMap[row][col], static_cast<uint8_t>(reading ? 1 : 0)};
                                 psychoCharacteristic.writeValue(data, 2);
                             }
                             break;
@@ -76,7 +73,7 @@ void matrixScan(void *parameters)
                 lastReading[row][col] = reading;
                 pollCount[row][col]++;
             }
-            gpio_set_level((gpio_num_t)rowPins[row], 1); // Reset the row pin
+            digitalWrite(rowPins[row], HIGH); // Reset the row pin
         }
 
         if (benchmark)

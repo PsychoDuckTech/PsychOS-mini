@@ -6,6 +6,9 @@ const int usesMultiplexer = false;
 const int rowPins[totalRows] = {21, 4, 3, 8, 11, 12};
 const int colPins[totalCols] = {13, 14, 15, 16};
 
+bool moduleConnectionStatus = false;
+uint8_t capsLockStatus = 0;
+
 // Key Mapping (Layer 0)
 const uint8_t keyMapL0[totalRows][totalCols] = {
     {0, 0, 0, 0},

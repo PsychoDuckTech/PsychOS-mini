@@ -3,6 +3,8 @@
 #include <Arduino.h>
 #include "main.h"
 #include "utils/initializeMatrix.h"
+#include "globals.h"
+#include "BLEHandler.h"
 
 // External Variables from main.cpp
 extern const int rowPins[];

@@ -1,5 +1,6 @@
 #include <Arduino.h>
 #include "main.h"
+#include "globals.h"
 
 void initializeMatrix();
 void setupRowPins();
@@ -29,13 +30,10 @@ void setupColPins()
         // No column pins to setup here
         break;
     case false:
-        for (int i = 0; i < totalCols; i++)
+        for (int col = 0; col < totalCols; col++)
         {
-            for (int col = 0; col < totalCols; col++)
-            {
-                pinMode(colPins[col], INPUT_PULLUP);
-            }
-            break;
+            pinMode(colPins[col], INPUT_PULLUP);
         }
+        break;
     }
 }
