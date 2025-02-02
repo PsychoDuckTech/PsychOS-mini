@@ -3,8 +3,8 @@
 const int totalRows = 6;
 const int totalCols = 4;
 const int usesMultiplexer = false;
-const int rowPins[totalRows] = {21, 4, 3, 8, 11, 12};
-const int colPins[totalCols] = {13, 14, 15, 16};
+const int rowPins[totalRows] = {0, 1, 2, 3, 4, 5};
+const int colPins[totalCols] = {6, 7, 8, 9};
 
 bool moduleConnectionStatus = false;
 uint8_t capsLockStatus = 0;
@@ -28,8 +28,11 @@ const char *keyNameL0[totalRows][totalCols] = {
 
 void setup()
 {
-  delay(2);
-  Serial.begin(115200);
+  Serial1.begin(115200, SERIAL_8N1, /* RX */ 20, /* TX*/ 21);
+
+  while (!Serial1)
+    ; // Wait for serial connection
+  Serial1.println("\n\n=== BLE SLAVE STARTING ===");
 
   startBleTask();
   startMatrixScanTask();

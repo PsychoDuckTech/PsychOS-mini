@@ -14,31 +14,37 @@ void BLEHandler(void *parameter)
 {
     initializeBLE();
 
-    BLE.setLocalName("PsychoNumpad");
+    BLE.setLocalName("Tenki one");
     psychoService.addCharacteristic(psychoCharacteristic);
     BLE.addService(psychoService);
     BLE.advertise();
+    Serial1.println("Advertising started...");
 
     psychoCharacteristic.setEventHandler(BLEWritten, [](BLEDevice central, BLECharacteristic characteristic)
                                          {
                                              uint8_t data[1];
                                              characteristic.readValue(data, 1);
-                                             capsLockStatus = data[0]; // Update from main keyboard
-                                         });
+                                             Serial1.print("Received CapsLock: ");
+                                             Serial1.println(data[0]);
+                                             capsLockStatus = data[0]; });
 
     for (;;)
     {
         BLEDevice central = BLE.central();
-        if (central.connected())
+        if (central && central.connected())
         {
-            Serial.println("Connected to master!");
+            Serial1.print("Connected to master: ");
+            Serial1.println(central.localName());
             moduleConnectionStatus = true;
+            while (central.connected())
+            {
+                BLE.poll();
+                vTaskDelay(10 / portTICK_PERIOD_MS);
+            }
+            Serial1.println("Disconnected");
+            moduleConnectionStatus = false;
         }
-        while (central.connected())
-        {
-            BLE.poll(); // Important for callback handling
-            vTaskDelay(10 / portTICK_PERIOD_MS);
-        }
+        vTaskDelay(100 / portTICK_PERIOD_MS);
     }
 }
 

@@ -10,8 +10,10 @@ extern BLECharacteristic psychoCharacteristic;
 
 void matrixScan(void *parameters)
 {
-    Serial.println(task_keyScanning_started);
-    Serial.println("\n");
+    initializeMatrix();
+
+    Serial1.println(task_keyScanning_started);
+    Serial1.println("\n");
 
     unsigned long lastTime = millis();
     unsigned long pollCount[totalRows][totalCols] = {0};
@@ -64,6 +66,10 @@ void matrixScan(void *parameters)
                             {
                                 uint8_t data[2] = {keyMap[row][col], static_cast<uint8_t>(reading ? 1 : 0)};
                                 psychoCharacteristic.writeValue(data, 2);
+                                Serial1.print("Sent key: ");
+                                Serial1.print(data[0]);
+                                Serial1.print(" State: ");
+                                Serial1.println(data[1]);
                             }
                             break;
                         }
@@ -81,12 +87,12 @@ void matrixScan(void *parameters)
             unsigned long currentTime = millis();
             if (currentTime - lastTime >= 1000)
             {
-                Serial.println("Individual key polling rates (polls/sec):");
+                Serial1.println("Individual key polling rates (polls/sec):");
                 for (int row = 0; row < totalRows; row++)
                 {
                     for (int col = 0; col < totalCols; col++)
                     {
-                        Serial.printf("Key [%d][%d]: %lu\n", row, col, pollCount[row][col]);
+                        Serial1.printf("Key [%d][%d]: %lu\n", row, col, pollCount[row][col]);
                         pollCount[row][col] = 0;
                     }
                 }
