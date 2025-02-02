@@ -28,6 +28,9 @@ const char *keyNameL0[totalRows][totalCols] = {
 
 void setup()
 {
+  delay(2);
+  Serial.begin(115200);
+
   startBleTask();
   startMatrixScanTask();
 }
