@@ -13,46 +13,32 @@ BLECharacteristic psychoCharacteristic(CHARACTERISTIC_UUID, BLERead | BLEWrite |
 void BLEHandler(void *parameter)
 {
     initializeBLE();
+
     BLE.setLocalName("PsychoNumpad");
     psychoService.addCharacteristic(psychoCharacteristic);
     BLE.addService(psychoService);
     BLE.advertise();
 
+    psychoCharacteristic.setEventHandler(BLEWritten, [](BLEDevice central, BLECharacteristic characteristic)
+                                         {
+                                             uint8_t data[1];
+                                             characteristic.readValue(data, 1);
+                                             capsLockStatus = data[0]; // Update from main keyboard
+                                         });
+
     for (;;)
     {
         BLEDevice central = BLE.central();
-        if (central)
-        {
-            while (central.connected())
-            {
-                // Send matrix data
-                uint8_t keyData[2] = {currentKeyCode, isPressed};
-                psychoCharacteristic.writeValue(keyData, 2);
-                vTaskDelay(10 / portTICK_PERIOD_MS);
-            }
-            moduleConnectionStatus = false;
-        }
-    }
-}
-
-void handleSlaveBLE()
-{
-    static bool autoConnected = false;
-
-    if (!autoConnected)
-    {
-        BLEDevice central = BLE.central();
-        if (central && central.localName() == "PsychoMaster")
+        if (central.connected())
         {
             Serial.println("Connected to master!");
             moduleConnectionStatus = true;
-            autoConnected = true;
         }
-    }
-
-    if (moduleConnectionStatus)
-    {
-        // Keypress data will be sent through matrixScan
+        while (central.connected())
+        {
+            BLE.poll(); // Important for callback handling
+            vTaskDelay(10 / portTICK_PERIOD_MS);
+        }
     }
 }
 

@@ -20,3 +20,7 @@ void startBleTask(UBaseType_t core = 1, uint32_t stackDepth = 16384, UBaseType_t
 // BLE Service and Characteristic
 extern BLEService psychoService;
 extern BLECharacteristic psychoCharacteristic;
+
+// Global variables
+extern bool moduleConnectionStatus;
+extern uint8_t capsLockStatus;

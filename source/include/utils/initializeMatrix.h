@@ -31,10 +31,11 @@ void setupColPins()
     case false:
         for (int i = 0; i < totalCols; i++)
         {
-            // Serial.printf("\nStarting column pin %d (GPIO%d) setup\n", i, colPins[i]);
-            pinMode(colPins[i], INPUT);
-            // Serial.printf("Completed column pin %d setup\n", i);
+            for (int col = 0; col < totalCols; col++)
+            {
+                pinMode(colPins[col], INPUT_PULLUP);
+            }
+            break;
         }
-        break;
     }
 }

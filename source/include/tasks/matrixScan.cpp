@@ -11,6 +11,8 @@ extern BLECharacteristic psychoCharacteristic;
 
 void matrixScan(void *parameters)
 {
+    initializeMatrix();
+
     Serial.println(task_keyScanning_started);
     Serial.println("\n");
 
@@ -22,35 +24,28 @@ void matrixScan(void *parameters)
     bool lastReading[totalRows][totalCols];
     unsigned long lastDebounceTime[totalRows][totalCols];
 
-    // Initialize all key states with a single scan.
     for (int row = 0; row < totalRows; row++)
     {
-        GPIO.out_w1tc = (1ULL << rowPins[row]);   // Activate current row pin
-        for (int col = 0; col < totalCols; col++) // Scan the column combination with the current row
+        gpio_set_level((gpio_num_t)rowPins[row], 0); // Activate current row pin
+        for (int col = 0; col < totalCols; col++)    // Scan the column combination with the current row
         {
-            colPinsMultiplexer.fastSelect(col);
-            ets_delay_us(4); // Small delay for electrical stability
-
-            bool reading = (colPinsMultiplexer.readChannel() == LOW);
+            bool reading = (digitalRead(colPins[col]) == LOW);
             keyStates[row][col] = reading;
             lastReading[row][col] = reading;
             lastDebounceTime[row][col] = millis();
         }
-        GPIO.out_w1ts = (1ULL << rowPins[row]); // Reset the row pin
+        gpio_set_level((gpio_num_t)rowPins[row], 1); // Reset the row pin
     }
 
     for (;;)
     {
         for (int row = 0; row < totalRows; row++)
         {
-            GPIO.out_w1tc = (1ULL << rowPins[row]); // Activate current row pin
+            gpio_set_level((gpio_num_t)rowPins[row], 0); // Activate current row pin
 
             for (int col = 0; col < totalCols; col++)
             {
-                colPinsMultiplexer.fastSelect(col);
-                ets_delay_us(4); // Small delay for electrical stability
-
-                bool reading = (colPinsMultiplexer.readChannel() == LOW);
+                bool reading = (digitalRead(colPins[col]) == LOW);
 
                 // If the reading has changed from the last reading, reset the debounce timer.
                 if (reading != lastReading[row][col])
@@ -81,7 +76,7 @@ void matrixScan(void *parameters)
                 lastReading[row][col] = reading;
                 pollCount[row][col]++;
             }
-            GPIO.out_w1ts = (1ULL << rowPins[row]); // Reset the row pin
+            gpio_set_level((gpio_num_t)rowPins[row], 1); // Reset the row pin
         }
 
         if (benchmark)

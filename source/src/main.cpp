@@ -25,7 +25,6 @@ const char *keyNameL0[totalRows][totalCols] = {
 
 void setup()
 {
-  initializeMatrix();
   startBleTask();
   startMatrixScanTask();
 }

@@ -2,14 +2,13 @@
 
 #include <Arduino.h>
 #include "main.h"
-#include "drivers/multiplexer/CD74HC4067.h"
 #include "utils/initializeMatrix.h"
 
 // External Variables from main.cpp
-extern Multiplexer colPinsMultiplexer;
 extern const int rowPins[];
-extern const uint8_t keyMapL0[][6];
-extern const char *keyNameL0[][6];
+extern const int colPins[];
+extern const uint8_t keyMapL0[6][4];
+extern const char *keyNameL0[6][4];
 extern const int totalRows;
 extern const int totalCols;
 
