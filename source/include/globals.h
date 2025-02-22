@@ -7,6 +7,8 @@ extern const int usesMultiplexer;
 extern const int rowPins[];
 extern const int colPins[];
 
+extern const int ledPin;
+
 extern bool connectionStatus;
 extern bool moduleConnectionStatus;
 extern uint8_t capsLockStatus;

@@ -29,7 +29,7 @@ void setupColPins()
     case true:
         // No column pins to setup here
         break;
-    case false:
+    default:
         for (int col = 0; col < totalCols; col++)
         {
             pinMode(colPins[col], INPUT_PULLUP);

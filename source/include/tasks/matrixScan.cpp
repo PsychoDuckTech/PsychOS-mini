@@ -1,4 +1,5 @@
 #include "matrixScan.h"
+#include <Arduino.h>
 
 extern BLECharacteristic psychoCharacteristic;
 
@@ -7,6 +8,8 @@ void matrixScan(void *parameters)
     initializeMatrix();
 
     bool lastKeyStates[totalRows][totalCols] = {false};
+
+    Serial.begin(115200); // Initialize serial communication for debugging
 
     for (;;)
     {
@@ -22,12 +25,36 @@ void matrixScan(void *parameters)
                 {
                     lastKeyStates[row][col] = currentState;
 
+                    Serial.print("Row: ");
+                    Serial.print(row);
+                    Serial.print(" Col: ");
+                    Serial.print(col);
+                    Serial.print(" State: ");
+                    Serial.println(currentState);
+
+                    Serial.print("moduleConnectionStatus: ");
+                    Serial.println(moduleConnectionStatus);
+                    Serial.print("keyMapL0[row][col]: ");
+                    Serial.println(keyMapL0[row][col]);
+
                     if (moduleConnectionStatus && keyMapL0[row][col] != 0)
                     {
                         uint8_t data[2] = {
                             keyMapL0[row][col],
                             static_cast<uint8_t>(currentState ? 1 : 0)};
                         psychoCharacteristic.writeValue(data, sizeof(data));
+                        Serial.print("Sent data: ");
+                        Serial.print(data[0]);
+                        Serial.print(", ");
+                        Serial.println(data[1]);
+                    }
+                    if (currentState)
+                    {
+                        digitalWrite(ledPin, HIGH);
+                    }
+                    else
+                    {
+                        digitalWrite(ledPin, LOW);
                     }
                 }
             }
