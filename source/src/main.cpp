@@ -13,7 +13,7 @@ uint8_t capsLockStatus = 0;
 const uint8_t keyMapL0[totalRows][totalCols] = {
     {0, 0, 0, 0},
     {KEY_NUMLOCK, KEY_SLASH, KEY_KPASTERISK, KEY_MINUS},
-    {KEY_1, KEY_2, KEY_3, KEY_KPPLUS},
+    {KEY_1, KEY_F5, KEY_3, KEY_KPPLUS},
     {KEY_4, KEY_5, KEY_6, 0},
     {KEY_7, KEY_8, KEY_9, KEY_ENTER},
     {KEY_0, 0, KEY_DELETE, 0}};
@@ -28,13 +28,8 @@ const char *keyNameL0[totalRows][totalCols] = {
 
 void setup()
 {
-  Serial1.begin(115200, SERIAL_8N1, /* RX */ 20, /* TX*/ 21);
-
-  while (!Serial1)
-    ; // Wait for serial connection
-  Serial1.println("\n\n=== BLE SLAVE STARTING ===");
-
   startBleTask();
   startMatrixScanTask();
 }
+
 void loop() {}
