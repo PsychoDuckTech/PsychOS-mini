@@ -1,7 +1,6 @@
 #pragma once
 
 #include <Arduino.h>
-#include "usbHIDKeyCodes.h" // by MightyPork on GitHub, customized by GabiBrawl
 #include "translations/enUS.h"
 #include "globals.h"
 
