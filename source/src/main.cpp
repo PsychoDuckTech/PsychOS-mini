@@ -1,10 +1,10 @@
 #include "main.h"
 
 const int totalRows = 6, totalCols = 4;
-const int rowPins[totalRows] = {0, 1, 2, 3, 4, 5},
-          colPins[totalCols] = {6, 7, 9, 10},
+const int rowPins[totalRows] = {1, 2, 3, 4, 5, 6},
+          colPins[totalCols] = {7, 8, 9, 10},
           usesMultiplexer = false;
-const int ledPin = 8;
+const int ledPin = 11;
 
 bool moduleConnectionStatus = false;
 uint8_t capsLockStatus = 0;
