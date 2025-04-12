@@ -3,6 +3,7 @@
 #include "BLEHandler.h"
 #include "globals.h"
 #include "utils/initializeBLE.h"
+#include "esp_sleep.h"
 
 #define SERVICE_UUID "4fafc201-1fb5-459e-8fcc-c5c9c331914b"
 #define CHARACTERISTIC_UUID "beb5483e-36e1-4688-b7f5-000000000001"
@@ -12,6 +13,9 @@ BLECharacteristic psychoCharacteristic(CHARACTERISTIC_UUID, BLERead | BLEWrite |
 
 void BLEHandler(void *parameter)
 {
+    // Enable light sleep
+    esp_sleep_enable_timer_wakeup(1000); // Wake up after 1ms
+
     initializeBLE();
     bool wasConnected = false;
 
@@ -35,7 +39,8 @@ void BLEHandler(void *parameter)
                 while (central.connected())
                 {
                     BLE.poll();
-                    vTaskDelay(10 / portTICK_PERIOD_MS);
+                    // Shorter delay when connected since we need to be responsive
+                    vTaskDelay(20 / portTICK_PERIOD_MS);
                 }
             }
 
@@ -47,7 +52,9 @@ void BLEHandler(void *parameter)
                 BLE.advertise();
             }
         }
-        vTaskDelay(100 / portTICK_PERIOD_MS);
+        // Much longer delay when not connected to save power
+        vTaskDelay(500 / portTICK_PERIOD_MS);
+        esp_light_sleep_start();
     }
 }
 
