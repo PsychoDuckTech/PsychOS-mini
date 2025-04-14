@@ -8,7 +8,7 @@
 #define CHARACTERISTIC_UUID "beb5483e-36e1-4688-b7f5-000000000001"
 
 QueueHandle_t hostMessageQueue;
-static bool localKeyPressed = false;  // Track if the key was from local matrix
+static bool localKeyPressed = false; // Track if the key was from local matrix
 
 BLEService psychoService(SERVICE_UUID);
 BLECharacteristic psychoCharacteristic(CHARACTERISTIC_UUID, BLERead | BLEWrite | BLENotify, 20);
@@ -63,9 +63,11 @@ void handleReceivedKeypress(const uint8_t *data, int length, bool fromMatrix)
     uint8_t keyCode = data[0];
     bool isPressed = data[1] == 1;
 
-    if (fromMatrix) {
+    if (fromMatrix)
+    {
         // Matrix key - send directly to connected device
-        if (connection.isConnected) {
+        if (connection.isConnected)
+        {
             const uint8_t eventData[2] = {keyCode, static_cast<uint8_t>(isPressed ? 1 : 0)};
             connection.characteristic.writeValue(eventData, 2);
             Serial.print("BLE: Sending matrix key ");
@@ -74,7 +76,8 @@ void handleReceivedKeypress(const uint8_t *data, int length, bool fromMatrix)
         }
     }
     // Ignore BLE received keys - we don't need to echo them back
-    else {
+    else
+    {
         Serial.print("BLE: Received key ");
         Serial.print(isPressed ? "press: " : "release: ");
         Serial.println(keyCode, HEX);

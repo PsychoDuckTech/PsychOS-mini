@@ -3,13 +3,15 @@
 #include "translations/enUS.h"
 
 // Message types for key events
-enum MessageType {
+enum MessageType
+{
     KEY_PRESS,
     KEY_RELEASE
 };
 
 // Host message structure
-struct HostMessage {
+struct HostMessage
+{
     MessageType type;
     uint8_t data;
 };
