@@ -3,19 +3,20 @@
 #include "tasks/BLEHandler.h"
 #include "globals.h"
 
-// Function declaration from BLEHandler.cpp
-void handleReceivedKeypress(const uint8_t *data, int length, bool fromMatrix);
-
 void matrixScan(void *parameters)
 {
     initializeMatrix();
-
     bool lastKeyStates[totalRows][totalCols] = {false};
-
     Serial.begin(115200);
 
     for (;;)
     {
+        if (!moduleConnectionStatus)
+        {
+            vTaskDelay(100 / portTICK_PERIOD_MS);
+            continue;
+        }
+
         bool anyKeyPressed = false;
         for (int row = 0; row < totalRows; row++)
         {
@@ -34,18 +35,9 @@ void matrixScan(void *parameters)
                         anyKeyPressed = true;
                     }
 
-                    if (moduleConnectionStatus && keyMapL0[row][col] != 0)
+                    if (keyMapL0[row][col] != 0)
                     {
-                        uint8_t data[2] = {
-                            keyMapL0[row][col],
-                            static_cast<uint8_t>(currentState ? 1 : 0)};
-
-                        Serial.print("Matrix: Key ");
-                        Serial.print(currentState ? "pressed: " : "released: ");
-                        Serial.println(data[0], HEX);
-
-                        // Send to BLE handler with fromMatrix=true
-                        handleReceivedKeypress(data, 2, true);
+                        sendKeyEvent(keyMapL0[row][col], currentState);
                     }
 
                     digitalWrite(ledPin, currentState ? HIGH : LOW);

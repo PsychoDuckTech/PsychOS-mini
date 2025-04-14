@@ -11,6 +11,7 @@ void BLEHandler(void *parameter);
 void handleMasterBLE();
 void handleSlaveBLE();
 void handleReceivedKeypress(const uint8_t *data, int length, bool fromMatrix = false);
+void sendKeyEvent(uint8_t keyCode, bool isPressed);
 void startBleTask(UBaseType_t core = 1, uint32_t stackDepth = 16384, UBaseType_t priority = 1);
 
 // BLE Service and Characteristic UUIDs
