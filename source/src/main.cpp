@@ -1,5 +1,7 @@
 #include "main.h"
 
+const char *PRODUCT_NAME = "Tenki one"; // In Japanese, the numeric keypad is called "テンキー" (tenkī), a term derived from the English "ten key."
+
 const int totalRows = 6, totalCols = 4;
 const int rowPins[totalRows] = {1, 2, 3, 4, 5, 6},
           colPins[totalCols] = {7, 8, 9, 10},

@@ -7,7 +7,7 @@
 // Global Constants
 extern const char *OS_version;
 extern const char *byCompany;
-const char *PRODUCT_NAME = "Tenki one"; // In Japanese, the numeric keypad is called "テンキー" (tenkī), a term derived from the English "ten key."
+extern const char *PRODUCT_NAME;
 
 // Matrix Configuration
 extern const int totalRows;

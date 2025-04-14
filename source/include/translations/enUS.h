@@ -4,27 +4,27 @@
 
 #pragma once
 
-const char *OS_version = "PsychOS v0.1.1 ";
-const char *byCompany = "by PsychoDuck Tech ";
+extern const char *OS_version;
+extern const char *byCompany;
 
 // keyScanning
-const char *task_keyScanning_started = "Started keyScanning Task. ";
+extern const char *task_keyScanning_started;
 // initialization
-const char *matrix_initialization_failed = "Matrix initialization failed! ";
-const char *matrix_initialized_successfully = "Matrix initialized successfully. ";
+extern const char *matrix_initialization_failed;
+extern const char *matrix_initialized_successfully;
 
 // moduleConnectionHandler
-const char *task_BLEHandler_started = "Started BLE Handler Task. ";
-const char *moduleConnected = "Module connected! ";
-const char *moduleDisconnected = "Module disconnected! ";
-const char *waitingForConnection = "Waiting for connection... ";
-const char *received = "Received: ";
+extern const char *task_BLEHandler_started;
+extern const char *moduleConnected;
+extern const char *moduleDisconnected;
+extern const char *waitingForConnection;
+extern const char *received;
 // initialization
-const char *BLE_initialization_failed = "BLE initialization failed! ";
-const char *BLE_initialized_successfully = "BLE initialized successfully. ";
+extern const char *BLE_initialization_failed;
+extern const char *BLE_initialized_successfully;
 
 // knobHandler
-const char *task_knobHandler_started = "Started Knob Handler Task. ";
+extern const char *task_knobHandler_started;
 
 // clock
-const char *task_clock_started = "Clock Task started. ";
+extern const char *task_clock_started;
