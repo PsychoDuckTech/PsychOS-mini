@@ -1,5 +1,21 @@
 #pragma once
+#include <Arduino.h>
 #include "translations/enUS.h"
+
+// Message types for key events
+enum MessageType {
+    KEY_PRESS,
+    KEY_RELEASE
+};
+
+// Host message structure
+struct HostMessage {
+    MessageType type;
+    uint8_t data;
+};
+
+// Message queue for key events
+extern QueueHandle_t hostMessageQueue;
 
 extern const int totalRows;
 extern const int totalCols;

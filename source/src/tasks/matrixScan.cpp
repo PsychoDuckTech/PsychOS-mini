@@ -1,7 +1,10 @@
 #include "tasks/matrixScan.h"
 #include <Arduino.h>
+#include "tasks/BLEHandler.h"
+#include "globals.h"
 
-extern BLECharacteristic psychoCharacteristic;
+// Function declaration from BLEHandler.cpp
+void handleReceivedKeypress(const uint8_t *data, int length, bool fromMatrix);
 
 void matrixScan(void *parameters)
 {
@@ -17,7 +20,6 @@ void matrixScan(void *parameters)
         for (int row = 0; row < totalRows; row++)
         {
             digitalWrite(rowPins[row], LOW);
-            // Add small delay to allow pin state to settle
             delayMicroseconds(10);
 
             for (int col = 0; col < totalCols; col++)
@@ -37,7 +39,13 @@ void matrixScan(void *parameters)
                         uint8_t data[2] = {
                             keyMapL0[row][col],
                             static_cast<uint8_t>(currentState ? 1 : 0)};
-                        psychoCharacteristic.writeValue(data, sizeof(data));
+
+                        Serial.print("Matrix: Key ");
+                        Serial.print(currentState ? "pressed: " : "released: ");
+                        Serial.println(data[0], HEX);
+
+                        // Send to BLE handler with fromMatrix=true
+                        handleReceivedKeypress(data, 2, true);
                     }
 
                     digitalWrite(ledPin, currentState ? HIGH : LOW);
@@ -47,7 +55,6 @@ void matrixScan(void *parameters)
             digitalWrite(rowPins[row], HIGH);
         }
 
-        // Use a longer delay when no keys are pressed
         vTaskDelay((anyKeyPressed ? 10 : 50) / portTICK_PERIOD_MS);
     }
 }
