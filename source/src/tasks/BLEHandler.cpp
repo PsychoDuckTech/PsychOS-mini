@@ -38,7 +38,10 @@ void BLEHandler(void *parameter)
                     if (remotePsychoCharacteristic)
                     {
                         moduleConnectionStatus = true;
-                        Serial.println("Connected to Kibodo One");
+                        Serial.print("Connected to device: ");
+                        Serial.println(peripheral.localName());
+                        Serial.print("Address: ");
+                        Serial.println(peripheral.address());
                     }
                 }
             }

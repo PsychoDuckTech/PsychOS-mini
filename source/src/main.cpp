@@ -24,7 +24,7 @@ const uint8_t keyMapL0[totalRows][totalCols] = {
 void setup()
 {
 
-  delay(2000); // Wait for serial to initialize
+  delay(0); // Wait for serial to initialize
   Serial.begin(115200);
   Serial.println(String("Welcome to ") + PRODUCT_NAME);
   Serial.println(OS_version);

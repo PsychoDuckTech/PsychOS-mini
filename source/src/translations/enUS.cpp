@@ -1,6 +1,6 @@
 #include "translations/enUS.h"
 
-const char *OS_version = "PsychOS-mini v0.1.1 ";
+const char *OS_version = "PsychOS-mini v0.1.2 ";
 const char *byCompany = "by PsychoDuck Tech ";
 
 // keyScanning
